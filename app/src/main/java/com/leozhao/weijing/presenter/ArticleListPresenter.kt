@@ -55,7 +55,7 @@ class ArticleListPresenter(view: IArticleListView) {
             }
 
             override fun onFailure(call: Call<ArticleList>?, t: Throwable?) {
-                Log.d("dozhao", t?.message)
+                Log.d("dozhao", t?.message ?: "No message")
                 mView.getSwipeRefreshLayout().isRefreshing = false
             }
 

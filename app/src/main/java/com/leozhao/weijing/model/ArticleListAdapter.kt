@@ -1,5 +1,6 @@
 package com.leozhao.weijing.model
 
+import android.content.Intent
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.leozhao.weijing.Constant
 import com.leozhao.weijing.R
+import com.leozhao.weijing.view.ArticleActivity
 
 /**
  * Created by dozhao on 7/24/17.
@@ -45,6 +48,13 @@ class ArticleListAdapter(private val articleList: List<Article>):
                 .load(imgUrl)
                 .placeholder(R.drawable.image_placeholder)
                 .into(imageView)
+        cardView.setOnClickListener {
+            val context = it.context
+            val intent = Intent(context, ArticleActivity::class.java)
+            intent.putExtra(Constant.ARTICLE_URL, article.url)
+            intent.putExtra(Constant.ARTICLE_AUTHOR, article.source)
+            context.startActivity(intent)
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
