@@ -2,7 +2,6 @@ package com.leozhao.weijing.presenter
 
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.View
 import com.leozhao.weijing.model.APIClient
 import com.leozhao.weijing.model.ArticleList
 import com.leozhao.weijing.model.ArticleListAdapter
@@ -17,7 +16,8 @@ import retrofit2.Response
 
 class ArticleListPresenter(view: IArticleListView) {
     val mView = view
-    fun loadArticleList(): Unit {
+    fun initArticleList(): Unit {
+        mView.getSwipeRefreshLayout().isRefreshing = true
         val recyclerView = mView.getRecyclerView()
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -27,10 +27,14 @@ class ArticleListPresenter(view: IArticleListView) {
         val mLayoutManager = LinearLayoutManager(mView.getContext())
         recyclerView.layoutManager = mLayoutManager
 
-        val progressBar = mView.getProgressBar()
-        progressBar.visibility= View.VISIBLE
+        refreshArticleList()
 
-        //Get ArticleList Data from API
+        mView.getSwipeRefreshLayout().setOnRefreshListener {
+            refreshArticleList()
+        }
+    }
+
+    fun refreshArticleList() {
         val service = APIClient.getClient().create(WeiJingService::class.java)
         val call = service.listArticles()
         call.enqueue(object: retrofit2.Callback<ArticleList> {
@@ -45,15 +49,14 @@ class ArticleListPresenter(view: IArticleListView) {
                         Log.d("dozhao", "title: ${article.title}")
                     }
                     val mAdapter = ArticleListAdapter(articlelist)
-                    recyclerView.adapter = mAdapter
+                    mView.getRecyclerView().adapter = mAdapter
                 }
-
-                progressBar.visibility= View.GONE
-
+                mView.getSwipeRefreshLayout().isRefreshing = false
             }
 
             override fun onFailure(call: Call<ArticleList>?, t: Throwable?) {
                 Log.d("dozhao", t?.message)
+                mView.getSwipeRefreshLayout().isRefreshing = false
             }
 
         })

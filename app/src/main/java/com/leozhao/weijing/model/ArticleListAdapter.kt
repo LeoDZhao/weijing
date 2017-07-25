@@ -33,6 +33,7 @@ class ArticleListAdapter(private val articleList: List<Article>):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val cardView = holder.mCardView
         val article = articleList[position]
+
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         val textView = cardView.findViewById(R.id.title) as TextView
@@ -40,8 +41,9 @@ class ArticleListAdapter(private val articleList: List<Article>):
 
         val imageView = cardView.findViewById(R.id.first_image) as ImageView
         val imgUrl = article.firstImg
-        Glide.with(cardView)
+        Glide.with(cardView.context)
                 .load(imgUrl)
+                .placeholder(R.drawable.image_placeholder)
                 .into(imageView)
     }
 
