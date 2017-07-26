@@ -1,13 +1,17 @@
 package com.leozhao.weijing.model
 
+import android.content.Intent
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.leozhao.weijing.Constant
 import com.leozhao.weijing.R
+import com.leozhao.weijing.view.ArticleActivity
 
 /**
  * Created by dozhao on 7/24/17.
@@ -24,6 +28,7 @@ class ArticleListAdapter(private val articleList: List<Article>):
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): ArticleListAdapter.ViewHolder {
+        Log.d(Constant.DEBUG_TAG, "onCreateViewHolder")
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.card_view, parent, false) as CardView
         return ViewHolder(view)
@@ -31,6 +36,7 @@ class ArticleListAdapter(private val articleList: List<Article>):
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.d(Constant.DEBUG_TAG, "onBindViewHolder, postion: $position")
         val cardView = holder.mCardView
         val article = articleList[position]
 
@@ -45,10 +51,26 @@ class ArticleListAdapter(private val articleList: List<Article>):
                 .load(imgUrl)
                 .placeholder(R.drawable.image_placeholder)
                 .into(imageView)
+        cardView.setOnClickListener {
+            val context = it.context
+            val intent = Intent(context, ArticleActivity::class.java)
+            intent.putExtra(Constant.ARTICLE_URL, article.url)
+            intent.putExtra(Constant.ARTICLE_AUTHOR, article.source)
+            context.startActivity(intent)
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
         return articleList.size
+    }
+
+    override fun onViewRecycled(holder: ViewHolder?) {
+        super.onViewRecycled(holder)
+        val v1 = holder?.oldPosition
+        val v2 = holder?.position
+        val v3 = holder?.adapterPosition
+        val v4 = holder?.layoutPosition
+        Log.d(Constant.DEBUG_TAG, "onViewRecycled: oldPostion: $v1, postion: $v2, adapterPostion: $v3, layoutPostion: $v4")
     }
 }

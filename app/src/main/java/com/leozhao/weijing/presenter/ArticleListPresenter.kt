@@ -2,6 +2,7 @@ package com.leozhao.weijing.presenter
 
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import com.leozhao.weijing.Constant
 import com.leozhao.weijing.model.APIClient
 import com.leozhao.weijing.model.ArticleList
 import com.leozhao.weijing.model.ArticleListAdapter
@@ -39,23 +40,24 @@ class ArticleListPresenter(view: IArticleListView) {
         val call = service.listArticles()
         call.enqueue(object: retrofit2.Callback<ArticleList> {
             override fun onResponse(call: Call<ArticleList>?, response: Response<ArticleList>?) {
-                Log.d("dozhao", response.toString())
+                Log.d(Constant.DEBUG_TAG, "Response: $response")
                 val body=response?.body()
-                Log.d("dozhao", "total page: ${body?.result?.totalPage}")
-                val articlelist = body?.result?.articleList
-                Log.d("dozhao", "Number of articles: " + articlelist?.size.toString())
-                if (articlelist!=null) {
-                    for (article in articlelist) {
-                        Log.d("dozhao", "title: ${article.title}")
+                Log.d(Constant.DEBUG_TAG, "Total page: ${body?.result?.totalPage}")
+                Log.d(Constant.DEBUG_TAG, "Current page: ${body?.result?.currentPage}")
+                val articleList = body?.result?.articleList
+                Log.d(Constant.DEBUG_TAG, "Articles per page: " + articleList?.size.toString())
+                if (articleList!=null) {
+                    for ((index, article) in articleList.withIndex()) {
+                        Log.d(Constant.DEBUG_TAG, "title$index: ${article.title}")
                     }
-                    val mAdapter = ArticleListAdapter(articlelist)
+                    val mAdapter = ArticleListAdapter(articleList)
                     mView.getRecyclerView().adapter = mAdapter
                 }
                 mView.getSwipeRefreshLayout().isRefreshing = false
             }
 
             override fun onFailure(call: Call<ArticleList>?, t: Throwable?) {
-                Log.d("dozhao", t?.message)
+                Log.d(Constant.DEBUG_TAG, t?.message ?: "No message")
                 mView.getSwipeRefreshLayout().isRefreshing = false
             }
 
