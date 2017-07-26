@@ -6,4 +6,5 @@ package com.leozhao.weijing
 object Constant {
     val ARTICLE_URL="article_url"
     val ARTICLE_AUTHOR="article_author"
+    val DEBUG_TAG="dozhao"
 }

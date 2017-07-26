@@ -18,7 +18,8 @@ class ArticleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_article)
         val url = intent.extras.getString(Constant.ARTICLE_URL)
         val author = intent.extras.getString(Constant.ARTICLE_AUTHOR)
-        Log.d("dozhao", "url is: $url \n author is: $author")
+        Log.d(Constant.DEBUG_TAG, "Article detail - URL is: $url")
+        Log.d(Constant.DEBUG_TAG, "Article detail - Author is: $author")
         title=author
         val webView: WebView = findViewById(R.id.webview) as WebView
         webView.setWebChromeClient(WebChromeClient())
