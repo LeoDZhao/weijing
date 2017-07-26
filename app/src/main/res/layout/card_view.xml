@@ -17,7 +17,9 @@
             android:id="@+id/first_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_marginStart="2dp"
             android:scaleType="centerCrop"
+            android:background="@color/lightGrey"
             android:contentDescription="@string/first_image" />
 
         <TextView
