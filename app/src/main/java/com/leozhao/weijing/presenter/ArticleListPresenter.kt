@@ -63,5 +63,9 @@ class ArticleListPresenter(view: IArticleListView) {
 
         })
     }
+
+    fun scrollArticleListToTop() {
+        mView.getRecyclerView().smoothScrollToPosition(0)
+    }
 }
 
