@@ -17,8 +17,20 @@ import com.leozhao.weijing.view.ArticleActivity
  * Created by dozhao on 7/24/17.
  */
 
-class ArticleListAdapter(private val articleList: List<Article>):
+object ArticleListAdapter:
         RecyclerView.Adapter<ArticleListAdapter.ViewHolder>() {
+    private var mArticleList: MutableList<Article> = mutableListOf()
+
+    fun addArticleList(articleList: List<Article>) {
+        mArticleList.addAll(articleList)
+    }
+
+    fun clearArticleList() {
+        mArticleList.clear()
+    }
+
+    fun totalArticleNumber() = mArticleList.size
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -38,7 +50,7 @@ class ArticleListAdapter(private val articleList: List<Article>):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.d(Constant.DEBUG_TAG, "onBindViewHolder, postion: $position")
         val cardView = holder.mCardView
-        val article = articleList[position]
+        val article = mArticleList[position]
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
@@ -62,7 +74,7 @@ class ArticleListAdapter(private val articleList: List<Article>):
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
-        return articleList.size
+        return mArticleList.size
     }
 
     override fun onViewRecycled(holder: ViewHolder?) {
@@ -73,4 +85,6 @@ class ArticleListAdapter(private val articleList: List<Article>):
         val v4 = holder?.layoutPosition
         Log.d(Constant.DEBUG_TAG, "onViewRecycled: oldPostion: $v1, postion: $v2, adapterPostion: $v3, layoutPostion: $v4")
     }
+
+
 }

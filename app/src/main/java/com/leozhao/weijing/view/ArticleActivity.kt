@@ -3,15 +3,14 @@ package com.leozhao.weijing.view
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.view.Window
+import android.webkit.*
 import com.leozhao.weijing.Constant
 import com.leozhao.weijing.R
-import android.webkit.WebSettings
-
+import android.widget.ProgressBar
 
 
 class ArticleActivity : AppCompatActivity() {
@@ -25,8 +24,6 @@ class ArticleActivity : AppCompatActivity() {
         Log.d(Constant.DEBUG_TAG, "Article detail - Author is: $author")
         title=author
         val webView: WebView = findViewById(R.id.webview) as WebView
-        webView.setWebChromeClient(WebChromeClient())
-        webView.setWebViewClient(WebViewClient())
         val settings = webView.settings
         settings.javaScriptEnabled = true
         settings.loadWithOverviewMode = true
@@ -45,7 +42,35 @@ class ArticleActivity : AppCompatActivity() {
             // older android version, disable hardware acceleration
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         }
+        val progressBar = findViewById(R.id.progressBar) as ProgressBar
+        webView.setWebViewClient(AppWebViewClient(progressBar))
+        webView.setWebChromeClient(AppWebChromClient(progressBar))
         webView.loadUrl(url)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
     }
 
+}
+
+class AppWebViewClient(private val progressBar: ProgressBar) : WebViewClient() {
+
+    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+        return true
+    }
+
+}
+
+class AppWebChromClient(private val progressBar: ProgressBar) : WebChromeClient() {
+    init {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    override fun onProgressChanged(view: WebView?, newProgress: Int) {
+        super.onProgressChanged(view, newProgress)
+        if (newProgress>50) {
+            progressBar.visibility = View.GONE
+        }
+        Log.d("leotest", "progress is $newProgress")
+    }
 }

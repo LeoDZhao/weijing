@@ -16,11 +16,10 @@ class MainActivity : AppCompatActivity(), IArticleListView {
     override fun getContext(): Context = this
     override fun getSwipeRefreshLayout(): SwipeRefreshLayout = findViewById(R.id.content_main) as SwipeRefreshLayout
 
-    val articleListPresenter: ArticleListPresenter = ArticleListPresenter(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val articleListPresenter = ArticleListPresenter(this)
         articleListPresenter.initArticleList()
         val toolbar: Toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
